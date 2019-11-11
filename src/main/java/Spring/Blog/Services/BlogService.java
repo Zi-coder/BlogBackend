@@ -11,4 +11,8 @@ public interface BlogService {
     String saveBlog(Blogs blog, Principal principal);
 
     List<Blogs> fetchPublicBlogOthers(Principal principal);
+
+    List<Blogs> fetchBlogsOfFollowing(Principal principal);
+
+    Blogs fetchSingleBlog(Long id);
 }

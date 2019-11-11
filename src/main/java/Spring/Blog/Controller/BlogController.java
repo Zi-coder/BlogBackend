@@ -22,5 +22,14 @@ public class BlogController {
     public List<Blogs> fetchPublicBlog(Principal principal){
         return blogService.fetchPublicBlogOthers(principal);
     }
+    @GetMapping("/privateBlogs")
+    public List<Blogs> fetchPrivateBlogs(Principal principal){
+        return blogService.fetchBlogsOfFollowing(principal);
+    }
+
+    @GetMapping("/details/{id}")
+    public Blogs blogDetails(@PathVariable ("id")Long id){
+        return blogService.fetchSingleBlog(id);
+    }
 
 }

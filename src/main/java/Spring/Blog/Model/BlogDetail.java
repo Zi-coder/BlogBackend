@@ -3,6 +3,7 @@ package Spring.Blog.Model;
 import javax.persistence.*;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"reactor_id" , "blog_id"}))
 public class BlogDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -10,9 +11,9 @@ public class BlogDetail {
     @ManyToOne
     private Blogs blog;
     @ManyToOne
-    private User reacter;
-    private boolean liked;
-    private boolean disliked;
+    private User reactor;
+    private byte liked;
+    private byte disliked;
     private String comment;
 
     public Long getId() {
@@ -31,27 +32,27 @@ public class BlogDetail {
         this.blog = blog;
     }
 
-    public User getReacter() {
-        return reacter;
+    public User getReactor() {
+        return reactor;
     }
 
-    public void setReacter(User reacter) {
-        this.reacter = reacter;
+    public void setReactor(User reactor) {
+        this.reactor = reactor;
     }
 
-    public boolean isLiked() {
+    public byte getLiked() {
         return liked;
     }
 
-    public void setLiked(boolean liked) {
+    public void setLiked(byte liked) {
         this.liked = liked;
     }
 
-    public boolean isDisliked() {
+    public byte getDisliked() {
         return disliked;
     }
 
-    public void setDisliked(boolean disliked) {
+    public void setDisliked(byte disliked) {
         this.disliked = disliked;
     }
 

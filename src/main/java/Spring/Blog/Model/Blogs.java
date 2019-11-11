@@ -10,7 +10,7 @@ public class Blogs {
     private Long id;
 
     @ManyToOne
-    private User creater;
+    private User creator;
     private String topic;
     private String category;
     private String pr;
@@ -27,12 +27,12 @@ public class Blogs {
         this.id = id;
     }
 
-    public User getCreater() {
-        return creater;
+    public User getCreator() {
+        return creator;
     }
 
-    public void setCreater(User creater) {
-        this.creater = creater;
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 
     public String getTopic() {
