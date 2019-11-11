@@ -19,7 +19,10 @@ public class UserServiceImplementation implements UserService {
     public User userByUsername(String username){
         return userDAO.findByUsername(username);
     }
-
+    @Override
+    public User findUserById(Long id){
+        return userDAO.findById(id).get();
+    }
     @Override
     public void editUserDetails(User newDetails){
        User oldDetails = userDAO.getOne(newDetails.getId());

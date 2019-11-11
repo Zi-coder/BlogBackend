@@ -13,8 +13,11 @@ import java.util.List;
 public interface BlogDAO extends JpaRepository<Blogs,Long> {
 
 
-    List<Blogs> findAllByPrEqualsOrderByDate(String pr);
-    List<Blogs> findAllByCreatorNotAndPrEquals(User user,String pr);
-    List<Blogs> findAllByCreatorAndPrEquals(User creator,String pr);
-
+//    List<Blogs> findAllByPrEqualsOrderByDate(String pr);
+    List<Blogs> findAllByCreatorNotAndPrEqualsOrderByDate(User user,String pr);
+    List<Blogs> findAllByCreatorAndPrEqualsOrderByDate(User creator,String pr);
+    List<Blogs> findAllByCreator(User user);
+    Blogs findByIdAndCreator(Long id,User creator);
+    List<Blogs> findAllByCreatorAndPrEqualsAndCategory(User creator,String pr,String category);
+    List<Blogs> findAllByCreatorNotAndPrEqualsAndCategory(User currentUser,String pr,String Category);
 }

@@ -1,6 +1,7 @@
 package Spring.Blog.Services;
 
 import Spring.Blog.Model.BlogDetail;
+import Spring.Blog.Model.Blogs;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -15,4 +16,6 @@ public interface BlogDetailService {
     void createBlog(Long id, BlogDetail blogDetail, Principal principal);
 
     void deleteComment(Long id);
+
+    List<BlogDetail> getBlogDetailByBlog(Blogs blog);
 }

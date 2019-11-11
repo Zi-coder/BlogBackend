@@ -37,5 +37,15 @@ public class UserController {
         userService.editUserDetails(user);
         return "\"Details Updated\"";
     }
+    @GetMapping("/gen-bio/{id}")
+    public User getGenBio(@PathVariable("id") Long id){
+        User userClone = userService.findUserById(id);
+        User retUser = new User();
+        retUser.setFullname(userClone.getFullname());
+        retUser.setPhoto(userClone.getPhoto());
+        retUser.setContact(userClone.getContact());
+        retUser.setBio(userClone.getBio());
+        return  retUser;
+    }
 
 }

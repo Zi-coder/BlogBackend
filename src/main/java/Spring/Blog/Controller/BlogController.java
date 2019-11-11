@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -26,10 +27,31 @@ public class BlogController {
     public List<Blogs> fetchPrivateBlogs(Principal principal){
         return blogService.fetchBlogsOfFollowing(principal);
     }
-
+    @DeleteMapping("/delete/{id}")
+    public String deleteBlog(@PathVariable("id") Long id,Principal principal){
+        blogService.deleteBlog(id,principal);
+        return "\"Blog Deleted Successfully\"";
+    }
     @GetMapping("/details/{id}")
     public Blogs blogDetails(@PathVariable ("id")Long id){
         return blogService.fetchSingleBlog(id);
     }
 
+    @GetMapping("creator/{id}")
+    public List<Blogs> fetchPublicBlogsByCreator(@PathVariable("id")Long id){
+        return blogService.findPublicBlogsByCreator(id);
+    }
+    @GetMapping("/current")
+    public List<Blogs> blogsByCurrentUser(Principal principal){
+        return blogService.findBlogsOfCurrent(principal);
+    }
+
+    @GetMapping("/private/{category}")
+    public List<Blogs> fetchPrivateByCategory(Principal principal,@PathVariable("category")String category){
+        return blogService.getPrivateByCategory(principal,category);
+    }
+    @GetMapping("/public/{category}")
+    public List<Blogs> fetchPublicByCategory(Principal principal,@PathVariable("category")String category){
+        return blogService.getPublicBlogsByCategory(principal,category);
+    }
 }
