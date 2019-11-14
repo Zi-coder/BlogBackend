@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -18,6 +17,11 @@ public class BlogController {
     @PostMapping ("/create")
     public String createBlog(@RequestBody Blogs blog, Principal principal){
        return blogService.saveBlog(blog,principal);
+    }
+    @PutMapping("/edit/{id}")
+    public String editBlog(Principal principal,@PathVariable("id")Long id,@RequestBody Blogs blogs){
+        blogService.editBlog(principal,id,blogs);
+        return  "\"Blog Edited\"";
     }
     @GetMapping("/publicBlogs")
     public List<Blogs> fetchPublicBlog(Principal principal){
@@ -54,4 +58,17 @@ public class BlogController {
     public List<Blogs> fetchPublicByCategory(Principal principal,@PathVariable("category")String category){
         return blogService.getPublicBlogsByCategory(principal,category);
     }
+
+
+
+    //Query Results
+    @GetMapping("/private/q={query}")
+    public List<Blogs> getPrivateByQuery(Principal principal,@PathVariable("query") String query){
+        return blogService.getPrivateByQuery(principal,query);
+    }
+    @GetMapping("/public/q={query}")
+    public List<Blogs> getPublicByQuery(Principal principal,@PathVariable("query") String query){
+        return blogService.getPublicByQuery(principal,query);
+    }
+
 }

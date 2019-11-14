@@ -37,4 +37,20 @@ public class FollowServiceImplementation implements FollowService {
         followDAO.delete(follow);
         return "\"Unfollow Successfull\"";
     }
+    @Override
+    public List<Follow> getFollowers(Principal principal){
+        return followDAO.findAllByFollowing(currentUserService.currentUser(principal));
+    }
+    @Override
+    public Long getFollowerCount(Long id){
+        return followDAO.countAllByFollowing(userDAO.findById(id).get());
+    }
+    @Override
+    public Long getFollowingCount(Long id){
+        return followDAO.countAllByUser(userDAO.findById(id).get());
+    }
+    @Override
+    public void deleteFollower(Long id,Principal principal){
+        followDAO.delete(followDAO.findByUserAndFollowing( userDAO.findById(id).get(),currentUserService.currentUser(principal) ));
+    }
 }

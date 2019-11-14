@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @CrossOrigin("*")
 @RestController
@@ -47,5 +48,8 @@ public class UserController {
         retUser.setBio(userClone.getBio());
         return  retUser;
     }
-
+    @GetMapping("/search/q={query}")
+    public List<User> getUserByQuery(@PathVariable("query") String fullname){
+        return userService.getByQuery(fullname);
+    }
 }

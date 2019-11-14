@@ -10,6 +10,8 @@ import java.util.List;
 public interface BlogService {
     String saveBlog(Blogs blog, Principal principal);
 
+    void editBlog(Principal principal, Long id, Blogs newBlog);
+
     List<Blogs> fetchPublicBlogOthers(Principal principal);
 
     List<Blogs> fetchBlogsOfFollowing(Principal principal);
@@ -26,4 +28,9 @@ public interface BlogService {
     List<Blogs> getPrivateByCategory(Principal principal, String Category);
 
     List<Blogs> getPublicBlogsByCategory(Principal principal, String category);
+
+    //queryResult
+    List<Blogs> getPrivateByQuery(Principal principal, String topic);
+
+    List<Blogs> getPublicByQuery(Principal principal, String query);
 }

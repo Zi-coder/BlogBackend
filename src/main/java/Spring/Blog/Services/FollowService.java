@@ -13,4 +13,12 @@ public interface FollowService {
     String newFollow(Long following_id, Principal principal);
 
     String unFollow(Long following_id, Principal principal);
+
+    List<Follow> getFollowers(Principal principal);
+
+    Long getFollowerCount(Long id);
+
+    Long getFollowingCount(Long id);
+
+    void deleteFollower(Long id, Principal principal);
 }

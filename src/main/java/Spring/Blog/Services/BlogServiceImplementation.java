@@ -34,15 +34,26 @@ public class BlogServiceImplementation implements BlogService {
 
     }
     @Override
+    public void editBlog(Principal principal, Long id, Blogs newBlog){
+       Blogs oldBlog =  blogDAO.findByIdAndCreator(id,currentUserService.currentUser(principal));
+       oldBlog.setDate(new Date());
+       oldBlog.setCategory(newBlog.getCategory());
+       oldBlog.setContent(newBlog.getContent());
+       oldBlog.setTopic(newBlog.getTopic());
+       oldBlog.setPr(newBlog.getPr());
+       blogDAO.save(oldBlog);
+    }
+
+    @Override
     public List<Blogs> fetchPublicBlogOthers(Principal principal){
-        return blogDAO.findAllByCreatorNotAndPrEqualsOrderByDate(currentUserService.currentUser(principal),"false");
+        return blogDAO.findAllByCreatorNotAndPrEqualsOrderByDateDesc(currentUserService.currentUser(principal),"false");
     }
     @Override
     public List<Blogs> fetchBlogsOfFollowing(Principal principal){
         List<Blogs> ret = new LinkedList<Blogs>();
         List<Follow> follows = followService.getFollowing(principal);
         for(Follow follow: follows){
-           List<Blogs> fetched = blogDAO.findAllByCreatorAndPrEqualsOrderByDate(follow.getFollowing(),"true");
+           List<Blogs> fetched = blogDAO.findAllByCreatorAndPrEqualsOrderByDateDesc(follow.getFollowing(),"true");
            for(Blogs blog : fetched){
                ret.add(blog);
            }
@@ -56,7 +67,7 @@ public class BlogServiceImplementation implements BlogService {
     @Override
     public List<Blogs> findPublicBlogsByCreator(Long id){
         User user = userService.findUserById(id);
-        return   blogDAO.findAllByCreatorAndPrEqualsOrderByDate(user,"false");
+        return   blogDAO.findAllByCreatorAndPrEqualsOrderByDateDesc(user,"false");
     }
 
     @Override
@@ -79,7 +90,7 @@ public class BlogServiceImplementation implements BlogService {
         List<Blogs> reto = new LinkedList<Blogs>();
         List<Follow> follows = followService.getFollowing(principal);
         for(Follow follow: follows){
-            List<Blogs> fetched = blogDAO.findAllByCreatorAndPrEqualsAndCategory(follow.getFollowing(),"true",Category);
+            List<Blogs> fetched = blogDAO.findAllByCreatorAndPrEqualsAndCategoryOrderByDateDesc(follow.getFollowing(),"true",Category);
             for(Blogs blog : fetched){
                 reto.add(blog);
             }
@@ -88,6 +99,38 @@ public class BlogServiceImplementation implements BlogService {
     }
     @Override
     public List<Blogs> getPublicBlogsByCategory(Principal principal, String category){
-    return  blogDAO.findAllByCreatorNotAndPrEqualsAndCategory(currentUserService.currentUser(principal),"false",category);
+    return  blogDAO.findAllByCreatorNotAndPrEqualsAndCategoryOrderByDateDesc(currentUserService.currentUser(principal),"false",category);
     }
+    //queryResult
+    @Override
+    public List<Blogs> getPrivateByQuery(Principal principal, String topic){
+        List<Blogs> repo = new LinkedList<Blogs>();
+        List<Follow> follows = followService.getFollowing(principal);
+        for(Follow follow: follows){
+            List<Blogs> fetchedTopic  = blogDAO.findAllByCreatorAndPrEqualsAndTopicContainsOrderByDateDesc(follow.getFollowing(),"true",topic);
+            List<Blogs> fetchedContent= blogDAO.findAllByCreatorAndPrEqualsAndContentContainsOrderByDateDesc(follow.getFollowing(),"true",topic);
+            for(Blogs blog : fetchedTopic){
+                repo.add(blog);
+            }
+            for(Blogs blog:fetchedContent){
+                if(!repo.contains(blog)){
+                    repo.add(blog);
+                }
+            }
+        }
+        return repo;
+    }
+    @Override
+    public List<Blogs> getPublicByQuery(Principal principal, String query){
+
+        List<Blogs> topicList =  blogDAO.findAllByCreatorNotAndPrEqualsAndTopicContainsOrderByDateDesc(currentUserService.currentUser(principal),"false",query);
+        List<Blogs> contentList =blogDAO.findAllByCreatorNotAndPrEqualsAndContentContainsOrderByDateDesc(currentUserService.currentUser(principal),"false",query);
+        for(Blogs blog: contentList){
+            if(!topicList.contains(blog)){
+                topicList.add(blog);
+            }
+        }
+        return  topicList;
+    }
+
 }

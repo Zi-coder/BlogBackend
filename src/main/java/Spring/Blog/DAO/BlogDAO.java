@@ -3,8 +3,6 @@ package Spring.Blog.DAO;
 import Spring.Blog.Model.Blogs;
 import Spring.Blog.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,10 +12,21 @@ public interface BlogDAO extends JpaRepository<Blogs,Long> {
 
 
 //    List<Blogs> findAllByPrEqualsOrderByDate(String pr);
-    List<Blogs> findAllByCreatorNotAndPrEqualsOrderByDate(User user,String pr);
-    List<Blogs> findAllByCreatorAndPrEqualsOrderByDate(User creator,String pr);
+    List<Blogs> findAllByCreatorNotAndPrEqualsOrderByDateDesc(User user, String pr);
+    List<Blogs> findAllByCreatorAndPrEqualsOrderByDateDesc(User creator, String pr);
     List<Blogs> findAllByCreator(User user);
     Blogs findByIdAndCreator(Long id,User creator);
-    List<Blogs> findAllByCreatorAndPrEqualsAndCategory(User creator,String pr,String category);
-    List<Blogs> findAllByCreatorNotAndPrEqualsAndCategory(User currentUser,String pr,String Category);
+    List<Blogs> findAllByCreatorAndPrEqualsAndCategoryOrderByDateDesc(User creator, String pr, String category);
+    List<Blogs> findAllByCreatorNotAndPrEqualsAndCategoryOrderByDateDesc(User currentUser, String pr, String Category);
+
+    //fetchPrivateOnSearch
+    //content
+    List<Blogs> findAllByCreatorAndPrEqualsAndContentContainsOrderByDateDesc(User creator, String pr, String content);
+    //topic
+    List<Blogs> findAllByCreatorAndPrEqualsAndTopicContainsOrderByDateDesc(User creator, String pr, String topic);
+    //fetch public Search
+    //content
+    List<Blogs> findAllByCreatorNotAndPrEqualsAndContentContainsOrderByDateDesc(User currentUser, String pr, String content);
+    //topic
+    List<Blogs> findAllByCreatorNotAndPrEqualsAndTopicContainsOrderByDateDesc(User creator, String pr, String topic);
 }

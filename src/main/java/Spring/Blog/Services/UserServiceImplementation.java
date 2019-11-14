@@ -5,6 +5,8 @@ import Spring.Blog.Model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImplementation implements UserService {
     @Autowired
@@ -33,6 +35,9 @@ public class UserServiceImplementation implements UserService {
        oldDetails.setPhoto(newDetails.getPhoto());
        oldDetails.setUsername(newDetails.getUsername());
        userDAO.save(oldDetails);
-
+    }
+    @Override
+    public List<User> getByQuery(String fullname){
+        return userDAO.findAllByFullnameContainingOrderByFullname(fullname);
     }
 }

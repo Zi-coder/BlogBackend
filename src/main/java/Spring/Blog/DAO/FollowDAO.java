@@ -11,4 +11,8 @@ import java.util.List;
 public interface FollowDAO extends JpaRepository<Follow,Long> {
    List<Follow> findAllByUser(User user);
    Follow findByUserAndFollowing(User user,User following);
+   Long countAllByFollowing(User following);
+   Long countAllByUser(User user);
+   List<Follow> findAllByFollowing(User currentUser);
 }
+
