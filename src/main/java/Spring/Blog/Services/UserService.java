@@ -16,4 +16,6 @@ public interface UserService {
     void editUserDetails(User newDetails);
 
     List<User> getByQuery(String fullname);
+
+    void changePassword(String username, String password);
 }

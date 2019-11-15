@@ -14,7 +14,7 @@ public interface BlogDAO extends JpaRepository<Blogs,Long> {
 //    List<Blogs> findAllByPrEqualsOrderByDate(String pr);
     List<Blogs> findAllByCreatorNotAndPrEqualsOrderByDateDesc(User user, String pr);
     List<Blogs> findAllByCreatorAndPrEqualsOrderByDateDesc(User creator, String pr);
-    List<Blogs> findAllByCreator(User user);
+    List<Blogs> findAllByCreatorOrderByDateDesc(User user);
     Blogs findByIdAndCreator(Long id,User creator);
     List<Blogs> findAllByCreatorAndPrEqualsAndCategoryOrderByDateDesc(User creator, String pr, String category);
     List<Blogs> findAllByCreatorNotAndPrEqualsAndCategoryOrderByDateDesc(User currentUser, String pr, String Category);

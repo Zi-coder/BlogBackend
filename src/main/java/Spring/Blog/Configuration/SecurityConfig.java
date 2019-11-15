@@ -34,6 +34,7 @@ import javax.sql.DataSource;
             http.csrf().disable()
                     .authorizeRequests().antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                     .antMatchers("/user/register").permitAll()
+                    .antMatchers("/user/change").permitAll()
                     .anyRequest().authenticated()
                     .and().httpBasic();
             http.cors();

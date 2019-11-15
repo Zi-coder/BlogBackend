@@ -15,6 +15,7 @@ import java.util.List;
 
 @Service
 public class BlogServiceImplementation implements BlogService {
+    List<Blogs> retu = new LinkedList<Blogs>();
     @Autowired
     CurrentUserService currentUserService;
     @Autowired
@@ -46,19 +47,37 @@ public class BlogServiceImplementation implements BlogService {
 
     @Override
     public List<Blogs> fetchPublicBlogOthers(Principal principal){
-        return blogDAO.findAllByCreatorNotAndPrEqualsOrderByDateDesc(currentUserService.currentUser(principal),"false");
+        retu.clear();
+        List<Blogs> fetched = new LinkedList<Blogs>();
+        List<Follow> follows = followService.getFollowing(principal);
+        for(Follow follow: follows){
+            fetched = blogDAO.findAllByCreatorAndPrEqualsOrderByDateDesc(follow.getFollowing(),"false");
+            for(Blogs blog : fetched){
+                retu.add(blog);
+            }
+        }
+        fetched.clear();
+        fetched = blogDAO.findAllByCreatorNotAndPrEqualsOrderByDateDesc(currentUserService.currentUser(principal),"false");
+        for(Blogs blog : fetched){
+            if(!retu.contains(blog)){
+                retu.add(blog);
+            }
+        }
+
+
+        return retu;
     }
     @Override
     public List<Blogs> fetchBlogsOfFollowing(Principal principal){
-        List<Blogs> ret = new LinkedList<Blogs>();
+        retu.clear();
         List<Follow> follows = followService.getFollowing(principal);
         for(Follow follow: follows){
            List<Blogs> fetched = blogDAO.findAllByCreatorAndPrEqualsOrderByDateDesc(follow.getFollowing(),"true");
            for(Blogs blog : fetched){
-               ret.add(blog);
+               retu.add(blog);
            }
         }
-        return ret;
+        return retu;
     }
     @Override
     public Blogs fetchSingleBlog(Long id){
@@ -72,7 +91,7 @@ public class BlogServiceImplementation implements BlogService {
 
     @Override
     public List<Blogs> findBlogsOfCurrent(Principal principal){
-     return  blogDAO.findAllByCreator(currentUserService.currentUser(principal));
+     return  blogDAO.findAllByCreatorOrderByDateDesc(currentUserService.currentUser(principal));
     }
     @Override
     public void deleteBlog(Long id, Principal principal){
@@ -87,19 +106,36 @@ public class BlogServiceImplementation implements BlogService {
     //Category Filter
     @Override
     public List<Blogs> getPrivateByCategory(Principal principal,String Category){
-        List<Blogs> reto = new LinkedList<Blogs>();
+        retu.clear();
         List<Follow> follows = followService.getFollowing(principal);
         for(Follow follow: follows){
             List<Blogs> fetched = blogDAO.findAllByCreatorAndPrEqualsAndCategoryOrderByDateDesc(follow.getFollowing(),"true",Category);
             for(Blogs blog : fetched){
-                reto.add(blog);
+                retu.add(blog);
             }
         }
-        return reto;
+        return retu;
     }
     @Override
     public List<Blogs> getPublicBlogsByCategory(Principal principal, String category){
-    return  blogDAO.findAllByCreatorNotAndPrEqualsAndCategoryOrderByDateDesc(currentUserService.currentUser(principal),"false",category);
+        retu.clear();
+        List<Blogs> fetched = new LinkedList<Blogs>();
+        List<Follow> follows = followService.getFollowing(principal);
+        for(Follow follow: follows){
+            fetched = blogDAO.findAllByCreatorAndPrEqualsAndCategoryOrderByDateDesc(follow.getFollowing(),"false",category);
+            for(Blogs blog : fetched){
+                retu.add(blog);
+            }
+        }
+        fetched.clear();
+        fetched = blogDAO.findAllByCreatorNotAndPrEqualsAndCategoryOrderByDateDesc(currentUserService.currentUser(principal),"false",category);
+        for(Blogs blog : fetched){
+            if(!retu.contains(blog)){
+                retu.add(blog);
+            }
+        }
+
+    return  retu;
     }
     //queryResult
     @Override

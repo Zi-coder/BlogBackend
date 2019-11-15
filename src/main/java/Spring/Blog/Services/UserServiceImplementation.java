@@ -28,16 +28,20 @@ public class UserServiceImplementation implements UserService {
     @Override
     public void editUserDetails(User newDetails){
        User oldDetails = userDAO.getOne(newDetails.getId());
-       oldDetails.setPassword(newDetails.getPassword());
        oldDetails.setBio(newDetails.getBio());
        oldDetails.setContact(newDetails.getContact());
        oldDetails.setFullname(newDetails.getFullname());
        oldDetails.setPhoto(newDetails.getPhoto());
-       oldDetails.setUsername(newDetails.getUsername());
        userDAO.save(oldDetails);
     }
     @Override
     public List<User> getByQuery(String fullname){
         return userDAO.findAllByFullnameContainingOrderByFullname(fullname);
+    }
+    @Override
+    public void changePassword(String username,String password){
+      User user =  userDAO.findByUsername(username);
+      user.setPassword(password);
+      userDAO.save(user);
     }
 }

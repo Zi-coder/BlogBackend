@@ -9,6 +9,26 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+class TempData{
+    String username;
+    String password;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}
 
 @CrossOrigin("*")
 @RestController
@@ -52,4 +72,10 @@ public class UserController {
     public List<User> getUserByQuery(@PathVariable("query") String fullname){
         return userService.getByQuery(fullname);
     }
+    @PostMapping("/change")
+    public String changePassword(@RequestBody TempData tempData){
+        userService.changePassword(tempData.getUsername(),tempData.getPassword());
+        return "\"Password Changed\"";
+    }
+
 }
